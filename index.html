@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine? 💘</title>
+  <style>
+    :root{
+      --pink-1:#ff4d8d;
+      --pink-2:#ff85a2;
+      --pink-3:#ffd1dc;
+      --ink:#2a1b2d;
+      --card: rgba(255,255,255,.16);
+      --card-border: rgba(255,255,255,.28);
+      --glow: rgba(255, 77, 141, .35);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: #fff;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 20% 20%, rgba(255,255,255,.22), transparent 55%),
+        radial-gradient(1000px 700px at 80% 20%, rgba(255,255,255,.14), transparent 60%),
+        radial-gradient(900px 700px at 50% 80%, rgba(255,255,255,.12), transparent 60%),
+        linear-gradient(135deg, #ff2d6f, #ff7aa8 45%, #ffd1dc);
+      overflow:hidden;
+    }
+
+    /* Soft floating hearts in the background */
+    .bg-hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      opacity:.55;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.12));
+    }
+    .bg-hearts span{
+      position:absolute;
+      bottom:-60px;
+      font-size: clamp(16px, 2vw, 30px);
+      animation: floatUp linear infinite;
+      user-select:none;
+    }
+    @keyframes floatUp{
+      to { transform: translateY(-120vh) rotate(25deg); opacity: 0; }
+    }
+
+    /* Main card */
+    .card{
+      width:min(920px, 92vw);
+      padding: clamp(18px, 3.6vw, 34px);
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.25),
+        0 0 0 10px rgba(255,255,255,.06),
+        0 0 70px 10px var(--glow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position: relative;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 55%);
+      transform: rotate(18deg);
+      pointer-events:none;
+    }
+
+    .topline{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:600;
+      letter-spacing:.4px;
+      opacity:.95;
+      position:relative;
+      z-index:1;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      font-size: 14px;
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.05;
+      text-shadow: 0 20px 40px rgba(0,0,0,.22);
+      position:relative;
+      z-index:1;
+    }
+    .sub{
+      margin:0 0 22px;
+      font-size: clamp(15px, 2vw, 19px);
+      line-height:1.5;
+      opacity:.95;
+      position:relative;
+      z-index:1;
+    }
+
+    .highlight{
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 10px 30px rgba(0,0,0,.18);
+      background: linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,.10));
+      padding: 0 .35em;
+      border-radius: .4em;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    /* Stage: where buttons live */
+    .stage{
+      position: relative;
+      height: 260px;
+      border-radius: 20px;
+      background: rgba(0,0,0,.10);
+      border: 1px dashed rgba(255,255,255,.22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      overflow:hidden;
+      z-index:1;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.5px;
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-size: 18px;
+      transition: transform .12s ease, filter .12s ease;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+      position:absolute;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn:hover{ filter: brightness(1.03); }
+
+    #yesBtn{
+      left: 18%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.10));
+      border: 1px solid rgba(255,255,255,.32);
+      color:#fff;
+      box-shadow: 0 22px 60px rgba(0,0,0,.22), 0 0 60px rgba(255,255,255,.18);
+    }
+
+    #noBtn{
+      left: 70%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      color: rgba(255,255,255,.95);
+      /* Make "No" unclickable */
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* Decorative corner hearts */
+    .corner{
+      position:absolute;
+      font-size: 28px;
+      opacity:.9;
+      filter: drop-shadow(0 14px 20px rgba(0,0,0,.22));
+      z-index:0;
+    }
+    .c1{ top:16px; left:18px; transform: rotate(-12deg); }
+    .c2{ top:18px; right:18px; transform: rotate(10deg); }
+    .c3{ bottom:14px; left:18px; transform: rotate(10deg); }
+    .c4{ bottom:16px; right:18px; transform: rotate(-10deg); }
+
+    /* Result modal */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(10, 0, 10, .35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 20;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .overlay.show{ display:flex; }
+    .modal{
+      width:min(720px, 92vw);
+      border-radius: 22px;
+      padding: 22px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.26);
+      box-shadow: 0 30px 90px rgba(0,0,0,.30);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .modal h2{
+      margin: 6px 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      text-shadow: 0 20px 40px rgba(0,0,0,.22);
+    }
+    .modal p{
+      margin: 0 0 16px;
+      font-size: clamp(15px, 2vw, 18px);
+      line-height:1.6;
+      opacity:.96;
+    }
+    .close{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.20);
+      border: 1px solid rgba(255,255,255,.26);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
+    .close:hover{ filter: brightness(1.05); }
+
+    /* Confetti canvas */
+    canvas#confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 25;
+      display:none;
+    }
+    canvas#confetti.show{ display:block; }
+
+    /* Small helper text */
+    .hint{
+      margin-top: 14px;
+      opacity: .9;
+      font-size: 14px;
+      text-align:center;
+      position:relative;
+      z-index:1;
+    }
+    .hint code{
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background floating hearts -->
+  <div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
+
+  <canvas id="confetti"></canvas>
+
+  <main class="card">
+    <div class="corner c1">💗</div>
+    <div class="corner c2">💘</div>
+    <div class="corner c3">💞</div>
+    <div class="corner c4">💝</div>
+
+    <div class="topline">
+      <div class="pill">✨ For my love</div>
+      <div class="pill">💌 A tiny question</div>
+      <div class="pill">🌹 Big feelings</div>
+    </div>
+
+    <h1>Will you be my Valentine? 💖</h1>
+    <p class="sub">
+      From the moment you came into my life, everything got softer, warmer, and brighter.
+      If I could, I’d put the whole universe in a box and gift it to you—
+      but for now… I’ll start with this:
+      <span class="highlight">will you be my Valentine?</span>
+    </p>
+
+    <section class="stage" id="stage" aria-label="Valentine question buttons">
+      <button class="btn" id="yesBtn" type="button">YES 💞</button>
+      <button class="btn" id="noBtn" type="button" aria-disabled="true">NO 🙈</button>
+    </section>
+
+    <div class="hint">
+      Tip: If you want to personalize it, search for <code>PERSONALIZE_ME</code> in the code.
+    </div>
+  </main>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Valentine accepted">
+    <div class="modal">
+      <h2>YAAAY!! 💘💘💘</h2>
+      <p id="yesMessage">
+        PERSONALIZE_ME: You just made my whole heart do a happy dance.
+        I’m the luckiest person alive — I can’t wait to celebrate us. 🌹
+      </p>
+      <button class="close" id="closeBtn" type="button">Ok my Valentine 💖</button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ----------------------------
+     * 1) Background floating hearts
+     * ----------------------------
+     * Creates multiple hearts that float upward at different speeds.
+     */
+    const bg = document.getElementById("bgHearts");
+    const heartEmojis = ["💗","💖","💘","💝","💞","💕"];
+    const heartCount = 26;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    for(let i=0;i<heartCount;i++){
+      const s = document.createElement("span");
+      s.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      s.style.left = rand(0, 100) + "vw";
+      s.style.animationDuration = rand(6, 14) + "s";
+      s.style.animationDelay = rand(0, 10) + "s";
+      s.style.opacity = rand(0.25, 0.85);
+      s.style.transform = `translateY(0) rotate(${rand(-25,25)}deg)`;
+      bg.appendChild(s);
+    }
+
+    /**
+     * ----------------------------------
+     * 2) The "NO" button that runs away
+     * ----------------------------------
+     * Requirements:
+     * - Moves when cursor comes near it
+     * - Is unclickable: pointer-events none (CSS)
+     *
+     * Approach:
+     * - We track pointer position over the stage area
+     * - If the pointer gets within a certain radius of the NO button,
+     *   we teleport the NO button to a new safe spot inside the stage.
+     */
+    const stage = document.getElementById("stage");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+
+    // Ensure buttons are inside stage bounds
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+    function getRect(el){ return el.getBoundingClientRect(); }
+
+    // Move NO button to a new random location (still inside stage)
+    function moveNoButtonAway(){
+      const stageRect = getRect(stage);
+      const noRect = getRect(noBtn);
+
+      // button size
+      const bw = noRect.width;
+      const bh = noRect.height;
+
+      // padding so it doesn't touch edges
+      const pad = 18;
+
+      // random positions within the stage
+      let x = rand(pad, stageRect.width - bw - pad);
+      let y = rand(pad, stageRect.height - bh - pad);
+
+      // Optional: avoid placing it too close to the YES button
+      const yesRect = getRect(yesBtn);
+      const yesX = yesRect.left - stageRect.left + yesRect.width/2;
+      const yesY = yesRect.top  - stageRect.top  + yesRect.height/2;
+
+      // try a few times to keep distance from YES
+      for(let attempts=0; attempts<6; attempts++){
+        const cx = x + bw/2;
+        const cy = y + bh/2;
+        const dist = Math.hypot(cx - yesX, cy - yesY);
+        if(dist > 160) break; // far enough
+        x = rand(pad, stageRect.width - bw - pad);
+        y = rand(pad, stageRect.height - bh - pad);
+      }
+
+      // Set new position
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.transform = "translate(0,0)";
+    }
+
+    // Initialize: convert from % based to px so movement is smooth and bounded
+    function initButtonPositions(){
+      const stageRect = getRect(stage);
+
+      // YES fixed nice position (left side)
+      yesBtn.style.left = (stageRect.width * 0.22) + "px";
+      yesBtn.style.top  = (stageRect.height * 0.55) + "px";
+      yesBtn.style.transform = "translate(-50%, -50%)";
+
+      // NO starts on right side
+      noBtn.style.left = (stageRect.width * 0.72) + "px";
+      noBtn.style.top  = (stageRect.height * 0.55) + "px";
+      noBtn.style.transform = "translate(-50%, -50%)";
+    }
+
+    window.addEventListener("resize", initButtonPositions);
+    initButtonPositions();
+
+    // Detect pointer near NO button
+    const dangerRadius = 120; // how close the cursor must be to trigger escape
+
+    function handlePointerMove(clientX, clientY){
+      const stageRect = getRect(stage);
+      const noRect = getRect(noBtn);
+
+      // pointer coords relative to stage
+      const px = clientX - stageRect.left;
+      const py = clientY - stageRect.top;
+
+      // button center relative to stage
+      const bx = (noRect.left - stageRect.left) + noRect.width/2;
+      const by = (noRect.top  - stageRect.top ) + noRect.height/2;
+
+      const dist = Math.hypot(px - bx, py - by);
+
+      if(dist < dangerRadius){
+        moveNoButtonAway();
+      }
+    }
+
+    // Desktop: mouse moves
+    stage.addEventListener("mousemove", (e) => {
+      handlePointerMove(e.clientX, e.clientY);
+    });
+
+    // Mobile: finger/touch moves near it
+    stage.addEventListener("touchmove", (e) => {
+      if(!e.touches || !e.touches[0]) return;
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive:true});
+
+    // Also move it if user taps the stage (so NO never becomes tappable)
+    stage.addEventListener("touchstart", (e) => {
+      if(!e.touches || !e.touches[0]) return;
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive:true});
+
+
+    /**
+     * ----------------------------
+     * 3) YES click => overlay + confetti
+     * ----------------------------
+     */
+    const overlay = document.getElementById("overlay");
+    const closeBtn = document.getElementById("closeBtn");
+
+    yesBtn.addEventListener("click", () => {
+      overlay.classList.add("show");
+      startConfetti(2400);
+    });
+
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.remove("show");
+    });
+
+    // Click outside modal closes too
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay){
+        overlay.classList.remove("show");
+      }
+    });
+
+    /**
+     * ----------------------------
+     * 4) Confetti (simple canvas)
+     * ----------------------------
+     * Lightweight confetti implementation: particles fall with gravity,
+     * random spin, and fade out.
+     */
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confettiParticles = [];
+    let confettiRunning = false;
+
+    function resizeCanvas(){
+      canvas.width = window.innerWidth * devicePixelRatio;
+      canvas.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function makeParticle(){
+      const colors = ["#ffffff", "#ffe0ea", "#ffd1dc", "#ff85a2", "#ff4d8d"];
+      return {
+        x: rand(0, window.innerWidth),
+        y: rand(-40, -10),
+        r: rand(3, 7),
+        vx: rand(-2.2, 2.2),
+        vy: rand(2.0, 5.6),
+        rot: rand(0, Math.PI*2),
+        vrot: rand(-0.15, 0.15),
+        life: rand(60, 110),
+        color: colors[Math.floor(Math.random()*colors.length)]
+      };
+    }
+
+    function startConfetti(durationMs = 2000){
+      canvas.classList.add("show");
+      confettiParticles = [];
+      for(let i=0;i<220;i++) confettiParticles.push(makeParticle());
+      confettiRunning = true;
+
+      const start = performance.now();
+
+      function tick(now){
+        if(!confettiRunning) return;
+
+        const elapsed = now - start;
+        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+
+        // Spawn a few extra particles early for a "burst"
+        if(elapsed < 900){
+          for(let i=0;i<6;i++) confettiParticles.push(makeParticle());
+        }
+
+        confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.04;         // gravity
+          p.rot += p.vrot;
+          p.life -= 1;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+
+          // Draw as little rectangles (confetti)
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 90));
+          ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
+
+          ctx.restore();
+        });
+
+        // Remove dead
+        confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < window.innerHeight + 40);
+
+        if(elapsed < durationMs || confettiParticles.length > 0){
+          requestAnimationFrame(tick);
+        } else {
+          confettiRunning = false;
+          canvas.classList.remove("show");
+          ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    /**
+     * ----------------------------
+     * 5) Make "NO" extra impossible
+     * ----------------------------
+     * Even though pointer-events is disabled, we also keep it moving
+     * when the pointer comes close so it looks playful.
+     *
+     * Bonus: If user somehow tries to focus it via keyboard, move it.
+     */
+    noBtn.addEventListener("focus", () => moveNoButtonAway());
+  </script>
+</body>
+</html>
