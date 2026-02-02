@@ -164,6 +164,8 @@
       border: 1px solid rgba(255,255,255,.32);
       color:#fff;
       box-shadow: 0 22px 60px rgba(0,0,0,.22), 0 0 60px rgba(255,255,255,.18);
+      transition: transform 0.18s ease, filter 0.12s ease;
+    will-change: transform;
     }
 
     #noBtn{
@@ -358,6 +360,17 @@
     const stage = document.getElementById("stage");
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
+    // --- YES grows when user approaches NO ---
+    let yesScale = 1;                // current scale of YES
+    const yesMaxScale = 2.6;         // cap so it doesn't get ridiculous
+    const yesScaleStep = 0.12;       // how much it grows per "NO escape"
+    const yesPulseBoost = 0.04;      // tiny bonus pulse for extra cute feel
+    
+    function applyYesScale(extraPulse = 0){
+      const scale = Math.min(yesScale + extraPulse, yesMaxScale);
+      // Keep YES centered while scaling
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
 
     // Ensure buttons are inside stage bounds
     function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
@@ -399,6 +412,9 @@
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
       noBtn.style.transform = "translate(0,0)";
+
+      yesScale = Math.min(yesScale + yesScaleStep, yesMaxScale);
+      applyYesScale(yesPulseBoost);
     }
 
     // Initialize: convert from % based to px so movement is smooth and bounded
@@ -414,6 +430,8 @@
       noBtn.style.left = (stageRect.width * 0.72) + "px";
       noBtn.style.top  = (stageRect.height * 0.55) + "px";
       noBtn.style.transform = "translate(-50%, -50%)";
+      yesScale = 1;
+      applyYesScale(0);
     }
 
     window.addEventListener("resize", initButtonPositions);
