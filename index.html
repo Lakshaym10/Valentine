@@ -519,9 +519,15 @@
     const closeBtn = document.getElementById("closeBtn");
 
     yesBtn.addEventListener("click", () => {
-      overlay.classList.add("show");
-      startConfetti(2400);
-    });
+    // If she hasn't turned it on, we gently enable it at the "YES" moment
+    if(!musicEnabled){
+      musicEnabled = true;
+    }
+    startMusicIfAllowed();
+  
+    overlay.classList.add("show");
+    startConfetti(2400);
+  });
 
     closeBtn.addEventListener("click", () => {
       overlay.classList.remove("show");
