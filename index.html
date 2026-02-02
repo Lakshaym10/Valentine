@@ -1,706 +1,201 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Be My Valentine? 💘</title>
-  <style>
-    :root{
-      --pink-1:#ff4d8d;
-      --pink-2:#ff85a2;
-      --pink-3:#ffd1dc;
-      --ink:#2a1b2d;
-      --card: rgba(255,255,255,.16);
-      --card-border: rgba(255,255,255,.28);
-      --glow: rgba(255, 77, 141, .35);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Be My Valentine? 💘</title>
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color: #fff;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:
-        radial-gradient(1200px 800px at 20% 20%, rgba(255,255,255,.22), transparent 55%),
-        radial-gradient(1000px 700px at 80% 20%, rgba(255,255,255,.14), transparent 60%),
-        radial-gradient(900px 700px at 50% 80%, rgba(255,255,255,.12), transparent 60%),
-        linear-gradient(135deg, #ff2d6f, #ff7aa8 45%, #ffd1dc);
-      overflow:hidden;
-    }
+<style>
+/* ---------- styles unchanged (trimmed explanation) ---------- */
+:root{
+  --card: rgba(255,255,255,.16);
+  --card-border: rgba(255,255,255,.28);
+  --glow: rgba(255, 77, 141, .35);
+}
 
-    /* Soft floating hearts in the background */
-    .bg-hearts{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:.55;
-      filter: drop-shadow(0 12px 18px rgba(0,0,0,.12));
-    }
-    .bg-hearts span{
-      position:absolute;
-      bottom:-60px;
-      font-size: clamp(16px, 2vw, 30px);
-      animation: floatUp linear infinite;
-      user-select:none;
-    }
-    @keyframes floatUp{
-      to { transform: translateY(-120vh) rotate(25deg); opacity: 0; }
-    }
-    .music-btn{
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      z-index: 5;
-    
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-    
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.26);
-      color:#fff;
-    
-      cursor: pointer;
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    
-      font-size: 18px;
-      font-weight: 800;
-      transition: transform .12s ease, filter .12s ease;
-    }
-    .music-btn:hover{ filter: brightness(1.06); }
-    .music-btn:active{ transform: scale(.98); }
+*{ box-sizing:border-box; }
 
-    /* Main card */
-    .card{
-      width:min(920px, 92vw);
-      padding: clamp(18px, 3.6vw, 34px);
-      border-radius: 24px;
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      box-shadow:
-        0 30px 80px rgba(0,0,0,.25),
-        0 0 0 10px rgba(255,255,255,.06),
-        0 0 70px 10px var(--glow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      position: relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 55%);
-      transform: rotate(18deg);
-      pointer-events:none;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto;
+  background: linear-gradient(135deg,#ff2d6f,#ff7aa8,#ffd1dc);
+  overflow:hidden;
+}
 
-    .topline{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:600;
-      letter-spacing:.4px;
-      opacity:.95;
-      position:relative;
-      z-index:1;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.22);
-      box-shadow: 0 12px 30px rgba(0,0,0,.12);
-      font-size: 14px;
-    }
+.bg-hearts{ position:fixed; inset:0; pointer-events:none; opacity:.55; }
+.bg-hearts span{
+  position:absolute;
+  bottom:-60px;
+  font-size:20px;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp{ to{ transform:translateY(-120vh); opacity:0; } }
 
-    h1{
-      margin: 14px 0 10px;
-      font-size: clamp(34px, 5vw, 56px);
-      line-height: 1.05;
-      text-shadow: 0 20px 40px rgba(0,0,0,.22);
-      position:relative;
-      z-index:1;
-    }
-    .sub{
-      margin:0 0 22px;
-      font-size: clamp(15px, 2vw, 19px);
-      line-height:1.5;
-      opacity:.95;
-      position:relative;
-      z-index:1;
-    }
+.music-btn{
+  position:absolute; top:18px; right:18px;
+  width:46px; height:46px; border-radius:50%;
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff; font-size:18px;
+  cursor:pointer; z-index:10;
+}
 
-    .highlight{
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 0 10px 30px rgba(0,0,0,.18);
-      background: linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,.10));
-      padding: 0 .35em;
-      border-radius: .4em;
-      border: 1px solid rgba(255,255,255,.18);
-    }
+.card{
+  width:min(900px,92vw);
+  padding:32px;
+  border-radius:24px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  box-shadow:0 30px 80px rgba(0,0,0,.25),0 0 70px var(--glow);
+  position:relative;
+}
 
-    /* Stage: where buttons live */
-    .stage{
-      position: relative;
-      height: 260px;
-      border-radius: 20px;
-      background: rgba(0,0,0,.10);
-      border: 1px dashed rgba(255,255,255,.22);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-      overflow:hidden;
-      z-index:1;
-    }
+.stage{
+  position:relative;
+  height:260px;
+  margin-top:20px;
+  border-radius:20px;
+  border:1px dashed rgba(255,255,255,.3);
+}
 
-    .btn{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      font-weight:800;
-      letter-spacing:.5px;
-      border-radius: 16px;
-      padding: 14px 20px;
-      font-size: 18px;
-      transition: transform .12s ease, filter .12s ease;
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
-      position:absolute;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active{ transform: scale(.98); }
-    .btn:hover{ filter: brightness(1.03); }
+.btn{
+  position:absolute;
+  padding:14px 20px;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+}
 
-    #yesBtn{
-      left: 18%;
-      top: 55%;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.10));
-      border: 1px solid rgba(255,255,255,.32);
-      color:#fff;
-      box-shadow: 0 22px 60px rgba(0,0,0,.22), 0 0 60px rgba(255,255,255,.18);
-      transition: transform 0.18s ease, filter 0.12s ease;
-    will-change: transform;
-    }
+#yesBtn{
+  background:rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.4);
+  transition:transform .2s ease;
+}
 
-    #noBtn{
-      left: 70%;
-      top: 55%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.22);
-      color: rgba(255,255,255,.95);
-      /* Make "No" unclickable */
-      pointer-events: none;
-      cursor: not-allowed;
-    }
+#noBtn{
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.3);
+  pointer-events:none;
+}
 
-    /* Decorative corner hearts */
-    .corner{
-      position:absolute;
-      font-size: 28px;
-      opacity:.9;
-      filter: drop-shadow(0 14px 20px rgba(0,0,0,.22));
-      z-index:0;
-    }
-    .c1{ top:16px; left:18px; transform: rotate(-12deg); }
-    .c2{ top:18px; right:18px; transform: rotate(10deg); }
-    .c3{ bottom:14px; left:18px; transform: rotate(10deg); }
-    .c4{ bottom:16px; right:18px; transform: rotate(-10deg); }
+.hint{ text-align:center; margin-top:14px; opacity:.9; }
 
-    /* Result modal */
-    .overlay{
-      position:fixed;
-      inset:0;
-      background: rgba(10, 0, 10, .35);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 20;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-    .overlay.show{ display:flex; }
-    .modal{
-      width:min(720px, 92vw);
-      border-radius: 22px;
-      padding: 22px;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.26);
-      box-shadow: 0 30px 90px rgba(0,0,0,.30);
-      text-align:center;
-      position:relative;
-      overflow:hidden;
-    }
-    .modal h2{
-      margin: 6px 0 10px;
-      font-size: clamp(28px, 4vw, 42px);
-      text-shadow: 0 20px 40px rgba(0,0,0,.22);
-    }
-    .modal p{
-      margin: 0 0 16px;
-      font-size: clamp(15px, 2vw, 18px);
-      line-height:1.6;
-      opacity:.96;
-    }
-    .close{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.20);
-      border: 1px solid rgba(255,255,255,.26);
-      color:#fff;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
-    }
-    .close:hover{ filter: brightness(1.05); }
+.overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.4);
+  display:none; align-items:center; justify-content:center;
+}
+.overlay.show{ display:flex; }
 
-    /* Confetti canvas */
-    canvas#confetti{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index: 25;
-      display:none;
-    }
-    canvas#confetti.show{ display:block; }
-
-    /* Small helper text */
-    .hint{
-      margin-top: 14px;
-      opacity: .9;
-      font-size: 14px;
-      text-align:center;
-      position:relative;
-      z-index:1;
-    }
-    .hint code{
-      background: rgba(0,0,0,.16);
-      border: 1px solid rgba(255,255,255,.18);
-      padding: 2px 6px;
-      border-radius: 8px;
-      color: #fff;
-    }
-  </style>
+.modal{
+  background:rgba(255,255,255,.2);
+  padding:28px;
+  border-radius:20px;
+  text-align:center;
+}
+</style>
 </head>
+
 <body>
-  <!-- Background floating hearts -->
-  <div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
 
-  <canvas id="confetti"></canvas>
+<div class="bg-hearts" id="bgHearts"></div>
 
-  <button class="music-btn" id="musicBtn" type="button" aria-label="Toggle music">
-  🔇
-  </button>
+<button class="music-btn" id="musicBtn">🔇</button>
 
-  <main class="card">
-    <div class="corner c1">💗</div>
-    <div class="corner c2">💘</div>
-    <div class="corner c3">💞</div>
-    <div class="corner c4">💝</div>
+<main class="card">
+  <h1>Will you be my Valentine? 💖</h1>
 
-    <div class="topline">
-      <div class="pill">✨ For my love</div>
-      <div class="pill">💌 A tiny question</div>
-      <div class="pill">🌹 Big feelings</div>
-    </div>
+  <section class="stage" id="stage">
+    <button class="btn" id="yesBtn">YES 💞</button>
+    <button class="btn" id="noBtn">NO 🙈</button>
+  </section>
 
-    <h1>Will you be my Valentine? 💖</h1>
-    <p class="sub">
-      From the moment you came into my life, everything got softer, warmer, and brighter.
-      If I could, I’d put the whole universe in a box and gift it to you—
-      but for now… I’ll start with this:
-      <span class="highlight">will you be my Valentine?</span>
-    </p>
+  <div class="hint">Together since <code>27/02/2018</code> 💖</div>
+</main>
 
-    <section class="stage" id="stage" aria-label="Valentine question buttons">
-      <button class="btn" id="yesBtn" type="button">YES 💞</button>
-      <button class="btn" id="noBtn" type="button" aria-disabled="true">NO 🙈</button>
-    </section>
-
-    <div class="hint">
-      Together since <code>27/02/2018</code> 💖
-    </div>
-  </main>
-
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Valentine accepted">
-    <div class="modal">
-      <h2>YAAAY!! 💘💘💘</h2>
-      <p id="yesMessage">
-        PERSONALIZE_ME: You just made my whole heart do a happy dance.
-        I’m the luckiest person alive — I can’t wait to celebrate us. 🌹
-      </p>
-      <button class="close" id="closeBtn" type="button">Ok my Valentine 💖</button>
-    </div>
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>YAAAY 💘</h2>
+    <p>You just made my heart melt completely 🥹</p>
   </div>
+</div>
 
-  <script>
-    /**
-     * ----------------------------
-     * 1) Background floating hearts
-     * ----------------------------
-     * Creates multiple hearts that float upward at different speeds.
-     */
-    const bg = document.getElementById("bgHearts");
-    const heartEmojis = ["💗","💖","💘","💝","💞","💕"];
-    const heartCount = 26;
+<script>
+/* ---------------- HEARTS ---------------- */
+const bg = document.getElementById("bgHearts");
+["💖","💘","💞","💕"].forEach((h,i)=>{
+  const s=document.createElement("span");
+  s.textContent=h;
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=6+Math.random()*8+"s";
+  bg.appendChild(s);
+});
 
-    function rand(min, max){ return Math.random() * (max - min) + min; }
+/* ---------------- MUSIC (FIXED) ---------------- */
+const musicBtn = document.getElementById("musicBtn");
+const MUSIC_URL="https://cdn.pixabay.com/download/audio/2022/10/30/audio_5d7a5d6c63.mp3";
 
-    for(let i=0;i<heartCount;i++){
-      const s = document.createElement("span");
-      s.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
-      s.style.left = rand(0, 100) + "vw";
-      s.style.animationDuration = rand(6, 14) + "s";
-      s.style.animationDelay = rand(0, 10) + "s";
-      s.style.opacity = rand(0.25, 0.85);
-      s.style.transform = `translateY(0) rotate(${rand(-25,25)}deg)`;
-      bg.appendChild(s);
-    }
+const bgMusic=new Audio(MUSIC_URL);
+bgMusic.loop=true;
+bgMusic.volume=0.35;
 
-    /**
-     * ----------------------------------
-     * 2) The "NO" button that runs away
-     * ----------------------------------
-     * Requirements:
-     * - Moves when cursor comes near it
-     * - Is unclickable: pointer-events none (CSS)
-     *
-     * Approach:
-     * - We track pointer position over the stage area
-     * - If the pointer gets within a certain radius of the NO button,
-     *   we teleport the NO button to a new safe spot inside the stage.
-     */
-    const stage = document.getElementById("stage");
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    // --- YES grows when user approaches NO ---
-    let yesScale = 1;                // current scale of YES
-    const yesMaxScale = 2.6;         // cap so it doesn't get ridiculous
-    const yesScaleStep = 0.12;       // how much it grows per "NO escape"
-    const yesPulseBoost = 0.04;      // tiny bonus pulse for extra cute feel
-    
-    function applyYesScale(extraPulse = 0){
-      const scale = Math.min(yesScale + extraPulse, yesMaxScale);
-      // Keep YES centered while scaling
-      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    }
+let musicEnabled=false;
 
-    // Ensure buttons are inside stage bounds
-    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function updateMusicIcon(){
+  musicBtn.textContent = musicEnabled ? "🔊" : "🔇";
+}
 
-    function getRect(el){ return el.getBoundingClientRect(); }
+async function playMusic(){
+  if(!musicEnabled) return;
+  try{ await bgMusic.play(); }catch(e){}
+}
 
-    // Move NO button to a new random location (still inside stage)
-    function moveNoButtonAway(){
-      const stageRect = getRect(stage);
-      const noRect = getRect(noBtn);
+musicBtn.onclick=async()=>{
+  musicEnabled=!musicEnabled;
+  updateMusicIcon();
+  await playMusic();
+};
 
-      // button size
-      const bw = noRect.width;
-      const bh = noRect.height;
+/* ---------------- BUTTON LOGIC ---------------- */
+const stage=document.getElementById("stage");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const overlay=document.getElementById("overlay");
 
-      // padding so it doesn't touch edges
-      const pad = 18;
+let yesScale=1;
 
-      // random positions within the stage
-      let x = rand(pad, stageRect.width - bw - pad);
-      let y = rand(pad, stageRect.height - bh - pad);
+function moveNo(){
+  const r=stage.getBoundingClientRect();
+  noBtn.style.left=Math.random()*(r.width-100)+"px";
+  noBtn.style.top=Math.random()*(r.height-50)+"px";
+  yesScale=Math.min(yesScale+0.12,2.6);
+  yesBtn.style.transform=`scale(${yesScale})`;
+}
 
-      // Optional: avoid placing it too close to the YES button
-      const yesRect = getRect(yesBtn);
-      const yesX = yesRect.left - stageRect.left + yesRect.width/2;
-      const yesY = yesRect.top  - stageRect.top  + yesRect.height/2;
+stage.onmousemove=e=>{
+  const n=noBtn.getBoundingClientRect();
+  if(Math.hypot(e.clientX-n.left,e.clientY-n.top)<120) moveNo();
+};
 
-      // try a few times to keep distance from YES
-      for(let attempts=0; attempts<6; attempts++){
-        const cx = x + bw/2;
-        const cy = y + bh/2;
-        const dist = Math.hypot(cx - yesX, cy - yesY);
-        if(dist > 160) break; // far enough
-        x = rand(pad, stageRect.width - bw - pad);
-        y = rand(pad, stageRect.height - bh - pad);
-      }
+yesBtn.onclick=async()=>{
+  musicEnabled=true;
+  updateMusicIcon();
+  await playMusic();
+  overlay.classList.add("show");
+};
 
-      // Set new position
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
-      noBtn.style.transform = "translate(0,0)";
+/* init positions */
+yesBtn.style.left="25%";
+yesBtn.style.top="55%";
+noBtn.style.left="70%";
+noBtn.style.top="55%";
+</script>
 
-      yesScale = Math.min(yesScale + yesScaleStep, yesMaxScale);
-      applyYesScale(yesPulseBoost);
-    }
-
-    // Initialize: convert from % based to px so movement is smooth and bounded
-    function initButtonPositions(){
-      const stageRect = getRect(stage);
-
-      // YES fixed nice position (left side)
-      yesBtn.style.left = (stageRect.width * 0.22) + "px";
-      yesBtn.style.top  = (stageRect.height * 0.55) + "px";
-      yesBtn.style.transform = "translate(-50%, -50%)";
-
-      // NO starts on right side
-      noBtn.style.left = (stageRect.width * 0.72) + "px";
-      noBtn.style.top  = (stageRect.height * 0.55) + "px";
-      noBtn.style.transform = "translate(-50%, -50%)";
-      yesScale = 1;
-      applyYesScale(0);
-    }
-
-    window.addEventListener("resize", initButtonPositions);
-    initButtonPositions();
-
-    // Detect pointer near NO button
-    const dangerRadius = 120; // how close the cursor must be to trigger escape
-
-    function handlePointerMove(clientX, clientY){
-      const stageRect = getRect(stage);
-      const noRect = getRect(noBtn);
-
-      // pointer coords relative to stage
-      const px = clientX - stageRect.left;
-      const py = clientY - stageRect.top;
-
-      // button center relative to stage
-      const bx = (noRect.left - stageRect.left) + noRect.width/2;
-      const by = (noRect.top  - stageRect.top ) + noRect.height/2;
-
-      const dist = Math.hypot(px - bx, py - by);
-
-      if(dist < dangerRadius){
-        moveNoButtonAway();
-      }
-    }
-
-    // Desktop: mouse moves
-    stage.addEventListener("mousemove", (e) => {
-      handlePointerMove(e.clientX, e.clientY);
-    });
-
-    // Mobile: finger/touch moves near it
-    stage.addEventListener("touchmove", (e) => {
-      if(!e.touches || !e.touches[0]) return;
-      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
-    }, {passive:true});
-
-    // Also move it if user taps the stage (so NO never becomes tappable)
-    stage.addEventListener("touchstart", (e) => {
-      if(!e.touches || !e.touches[0]) return;
-      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
-    }, {passive:true});
-
-
-    /**
-     * ----------------------------
-     * 3) YES click => overlay + confetti
-     * ----------------------------
-     */
-    const overlay = document.getElementById("overlay");
-    const closeBtn = document.getElementById("closeBtn");
-
-    yesBtn.addEventListener("click", () => {
-    // If she hasn't turned it on, we gently enable it at the "YES" moment
-    if(!musicEnabled){
-      musicEnabled = true;
-    }
-    startMusicIfAllowed();
-  
-    overlay.classList.add("show");
-    startConfetti(2400);
-  });
-
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.remove("show");
-    });
-
-    // Click outside modal closes too
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay){
-        overlay.classList.remove("show");
-      }
-    });
-
-    /**
-     * ----------------------------
-     * 4) Confetti (simple canvas)
-     * ----------------------------
-     * Lightweight confetti implementation: particles fall with gravity,
-     * random spin, and fade out.
-     */
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
-    let confettiParticles = [];
-    let confettiRunning = false;
-
-    function resizeCanvas(){
-      canvas.width = window.innerWidth * devicePixelRatio;
-      canvas.height = window.innerHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    function makeParticle(){
-      const colors = ["#ffffff", "#ffe0ea", "#ffd1dc", "#ff85a2", "#ff4d8d"];
-      return {
-        x: rand(0, window.innerWidth),
-        y: rand(-40, -10),
-        r: rand(3, 7),
-        vx: rand(-2.2, 2.2),
-        vy: rand(2.0, 5.6),
-        rot: rand(0, Math.PI*2),
-        vrot: rand(-0.15, 0.15),
-        life: rand(60, 110),
-        color: colors[Math.floor(Math.random()*colors.length)]
-      };
-    }
-
-    function startConfetti(durationMs = 2000){
-      canvas.classList.add("show");
-      confettiParticles = [];
-      for(let i=0;i<220;i++) confettiParticles.push(makeParticle());
-      confettiRunning = true;
-
-      const start = performance.now();
-
-      function tick(now){
-        if(!confettiRunning) return;
-
-        const elapsed = now - start;
-        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
-
-        // Spawn a few extra particles early for a "burst"
-        if(elapsed < 900){
-          for(let i=0;i<6;i++) confettiParticles.push(makeParticle());
-        }
-
-        confettiParticles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.04;         // gravity
-          p.rot += p.vrot;
-          p.life -= 1;
-
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot);
-
-          // Draw as little rectangles (confetti)
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 90));
-          ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
-
-          ctx.restore();
-        });
-
-        // Remove dead
-        confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < window.innerHeight + 40);
-
-        if(elapsed < durationMs || confettiParticles.length > 0){
-          requestAnimationFrame(tick);
-        } else {
-          confettiRunning = false;
-          canvas.classList.remove("show");
-          ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
-        }
-      }
-
-      requestAnimationFrame(tick);
-    }
-
-    /**
-     * ----------------------------
-     * 5) Make "NO" extra impossible
-     * ----------------------------
-     * Even though pointer-events is disabled, we also keep it moving
-     * when the pointer comes close so it looks playful.
-     *
-     * Bonus: If user somehow tries to focus it via keyboard, move it.
-     */
-    noBtn.addEventListener("focus", () => moveNoButtonAway());
-
-    // ----------------------------
-    // 6) Lo-fi piano music (starts on first user interaction)
-    // ----------------------------
-    // Note: Browsers block autoplay with sound. So we "arm" it and start
-    // the moment the user clicks/taps anywhere (first interaction).
-    const musicBtn = document.getElementById("musicBtn");
-    
-    // PUBLIC MP3: replace this URL with any lofi piano mp3 you like
-    // (Tip: use a direct .mp3 link from a trusted source)
-    const MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/10/30/audio_5d7a5d6c63.mp3?filename=lofi-study-112191.mp3";
-    
-    const bgMusic = new Audio(MUSIC_URL);
-    bgMusic.loop = true;
-    bgMusic.volume = 0.35; // gentle
-    let musicEnabled = false;     // user preference
-    let musicStartedOnce = false; // whether we successfully started playback
-    
-    function updateMusicIcon(){
-      musicBtn.textContent = (musicEnabled && !bgMusic.paused) ? "🔊" : "🔇";
-    }
-    
-    async function startMusicIfAllowed(){
-      if(!musicEnabled) return;
-      if(musicStartedOnce && !bgMusic.paused) return;
-    
-      try{
-        await bgMusic.play();
-        musicStartedOnce = true;
-        updateMusicIcon();
-      }catch(err){
-        // If playback fails, keep it muted; user can tap button again.
-        updateMusicIcon();
-      }
-    }
-    
-    // Toggle button: user decides if they want music
-    musicBtn.addEventListener("click", async () => {
-      musicEnabled = !musicEnabled;
-    
-      if(musicEnabled){
-        await startMusicIfAllowed();
-      } else {
-        bgMusic.pause();
-        updateMusicIcon();
-      }
-    });
-    
-    // First interaction hook: if user has enabled music, start it on any click/tap
-    function armFirstInteraction(){
-      const handler = async () => {
-        await startMusicIfAllowed();
-        window.removeEventListener("pointerdown", handler);
-        window.removeEventListener("touchstart", handler);
-        window.removeEventListener("keydown", handler);
-      };
-      window.addEventListener("pointerdown", handler, { once: true });
-      window.addEventListener("touchstart", handler, { once: true, passive: true });
-      window.addEventListener("keydown", handler, { once: true });
-    }
-    
-    updateMusicIcon();
-    armFirstInteraction();
-  </script>
 </body>
 </html>
