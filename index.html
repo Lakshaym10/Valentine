@@ -51,6 +51,35 @@
     @keyframes floatUp{
       to { transform: translateY(-120vh) rotate(25deg); opacity: 0; }
     }
+    .music-btn{
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 5;
+    
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+    
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.26);
+      color:#fff;
+    
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    
+      font-size: 18px;
+      font-weight: 800;
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .music-btn:hover{ filter: brightness(1.06); }
+    .music-btn:active{ transform: scale(.98); }
 
     /* Main card */
     .card{
@@ -279,6 +308,10 @@
 
   <canvas id="confetti"></canvas>
 
+  <button class="music-btn" id="musicBtn" type="button" aria-label="Toggle music">
+  🔇
+  </button>
+
   <main class="card">
     <div class="corner c1">💗</div>
     <div class="corner c2">💘</div>
@@ -305,7 +338,7 @@
     </section>
 
     <div class="hint">
-      Tip: If you want to personalize it, search for <code>PERSONALIZE_ME</code> in the code.
+      Together since <code>27/02/2018</code> 💖
     </div>
   </main>
 
@@ -599,6 +632,69 @@
      * Bonus: If user somehow tries to focus it via keyboard, move it.
      */
     noBtn.addEventListener("focus", () => moveNoButtonAway());
+
+    // ----------------------------
+    // 6) Lo-fi piano music (starts on first user interaction)
+    // ----------------------------
+    // Note: Browsers block autoplay with sound. So we "arm" it and start
+    // the moment the user clicks/taps anywhere (first interaction).
+    const musicBtn = document.getElementById("musicBtn");
+    
+    // PUBLIC MP3: replace this URL with any lofi piano mp3 you like
+    // (Tip: use a direct .mp3 link from a trusted source)
+    const MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/10/30/audio_5d7a5d6c63.mp3?filename=lofi-study-112191.mp3";
+    
+    const bgMusic = new Audio(MUSIC_URL);
+    bgMusic.loop = true;
+    bgMusic.volume = 0.35; // gentle
+    let musicEnabled = false;     // user preference
+    let musicStartedOnce = false; // whether we successfully started playback
+    
+    function updateMusicIcon(){
+      musicBtn.textContent = (musicEnabled && !bgMusic.paused) ? "🔊" : "🔇";
+    }
+    
+    async function startMusicIfAllowed(){
+      if(!musicEnabled) return;
+      if(musicStartedOnce && !bgMusic.paused) return;
+    
+      try{
+        await bgMusic.play();
+        musicStartedOnce = true;
+        updateMusicIcon();
+      }catch(err){
+        // If playback fails, keep it muted; user can tap button again.
+        updateMusicIcon();
+      }
+    }
+    
+    // Toggle button: user decides if they want music
+    musicBtn.addEventListener("click", async () => {
+      musicEnabled = !musicEnabled;
+    
+      if(musicEnabled){
+        await startMusicIfAllowed();
+      } else {
+        bgMusic.pause();
+        updateMusicIcon();
+      }
+    });
+    
+    // First interaction hook: if user has enabled music, start it on any click/tap
+    function armFirstInteraction(){
+      const handler = async () => {
+        await startMusicIfAllowed();
+        window.removeEventListener("pointerdown", handler);
+        window.removeEventListener("touchstart", handler);
+        window.removeEventListener("keydown", handler);
+      };
+      window.addEventListener("pointerdown", handler, { once: true });
+      window.addEventListener("touchstart", handler, { once: true, passive: true });
+      window.addEventListener("keydown", handler, { once: true });
+    }
+    
+    updateMusicIcon();
+    armFirstInteraction();
   </script>
 </body>
 </html>
